@@ -4,7 +4,6 @@
 
 PATH=${PWD}/bin:$PATH
 
-CC_SRC_PATH=chaincode/${CC_NAME}
 CC_VERSION=${1:-"1"}
 
 export FABRIC_CFG_PATH=${PWD}/config
@@ -29,6 +28,8 @@ popd || exit 1
 
 echo
 echo "Packaging chaincode ${CC_NAME}, version ${CC_VERSION}"
+
+rm ${CC_SRC_PATH}/${CC_NAME}.tar.gz | true
 
 peer lifecycle chaincode package ${CC_SRC_PATH}/${CC_NAME}.tar.gz \
     --path ${CC_SRC_PATH} \

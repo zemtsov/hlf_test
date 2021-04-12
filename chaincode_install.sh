@@ -4,7 +4,6 @@
 
 PATH=${PWD}/bin:$PATH
 
-CC_SRC_PATH=chaincode/${CC_NAME}
 CC_VERSION=${1:-"1"}
 
 export FABRIC_CFG_PATH=${PWD}/config
