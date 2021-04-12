@@ -1,3 +1,5 @@
+#!/bin/bash
+
 . env.sh
 
 PATH=${PWD}/bin:$PATH
