@@ -24,12 +24,4 @@ PEER_CONN_PARAMS="--peerAddresses localhost:7051 $(eval echo "--tlsRootCertFiles
 
 peer chaincode invoke -C "$CHANNEL_NAME" -o localhost:7050 --tls --ordererTLSHostnameOverride orderer.example.com --cafile "$ORDERER_CA" -n "${CC_NAME}" $PEER_CONN_PARAMS --isInit -c '{"Args": []}' >&log.txt
 
-#docker exec \
-#    -e "CORE_PEER_LOCALMSPID=Org1MSP" \
-#    -e "CORE_PEER_ID=peer0.org1.example.com" \
-#    -e "CORE_PEER_ADDRESS=peer0.org1.example.com:7051" \
-#    -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp" \
-#    cli \
-#    peer chaincode invoke -C $CHANNEL_NAME -o orderer.example.com:7050 -n ${CC_NAME} --peerAddresses peer0.org1.example.com:7051 --peerAddresses peer0.org2.example.com:9051 --isInit -c '{"Args": []}' >&log.txt
-
 cat log.txt

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
@@ -37,7 +38,12 @@ var Organizations = []Organization{
 
 func main() {
 
-	org := Organizations[1]
+	err := os.Setenv("DISCOVERY_AS_LOCALHOST", "true")
+	if err != nil {
+		log.Fatalf("Error setting DISCOVERY_AS_LOCALHOST environemnt variable: %v", err)
+	}
+
+	org := Organizations[0]
 	log.Printf("Working with organization %s\n", org.MspID)
 
 	walletName := fmt.Sprintf("%swallet", org.MspID)
@@ -57,8 +63,6 @@ func main() {
 	gw, err := gateway.Connect(
 		gateway.WithConfig(config.FromFile(filepath.Clean(org.ConnectionProfilePath))),
 		gateway.WithIdentity(wallet, AppUserName),
-		gateway.WithDiscovery(true),
-		gateway.WithCommitHandler(gateway.DefaultCommitHandlers.OrgAll),
 	)
 	if err != nil {
 		log.Fatalf("Failed to connect to gateway: %v", err)
