@@ -29,12 +29,12 @@ popd || exit 1
 echo
 echo "Packaging chaincode ${CC_NAME}, version ${CC_VERSION}"
 
-rm ${CC_SRC_PATH}/${CC_NAME}.tar.gz | true
+rm "${CC_SRC_PATH}"/"${CC_NAME}".tar.gz | true
 
-peer lifecycle chaincode package ${CC_SRC_PATH}/${CC_NAME}.tar.gz \
-    --path ${CC_SRC_PATH} \
-    --lang ${CC_RUNTIME_LANGUAGE} \
-    --label ${CC_NAME}_${CC_VERSION}
+peer lifecycle chaincode package "${CC_SRC_PATH}"/"${CC_NAME}".tar.gz \
+    --path "${CC_SRC_PATH}" \
+    --lang "${CC_RUNTIME_LANGUAGE}" \
+    --label "${CC_NAME}"_"${CC_VERSION}"
 
 result=$?
 if [ $result -ne 0 ]; then

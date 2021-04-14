@@ -1,0 +1,61 @@
+version: 1.0.0
+
+#
+# The client section used by GO SDK.
+#
+client:
+
+  organization: Org2
+
+  logging:
+    level: info
+
+  # Root of the MSP directories with keys and certs.
+  cryptoconfig:
+    path: ${PWD}/../organizations
+
+  tlsCerts:
+    systemCertPool: false
+    client:
+      key:
+        path: ${PWD}/../organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/tls/client.key
+      cert:
+        path: ${PWD}/../organizations/peerOrganizations/org2.example.com/users/User1@org2.example.com/tls/client.crt
+
+
+channels:
+  primary:
+    peers:
+      peer0.org2.example.com:
+        endorsingPeer: true
+
+        chaincodeQuery: true
+
+        ledgerQuery: true
+
+        eventSource: true
+#
+# list of participating organizations in this network
+#
+organizations:
+  Org2:
+    mspid: Org2MSP
+    cryptoPath:  peerOrganizations/org2.example.com/msp
+    peers:
+      - peer0.org2.example.com
+
+peers:
+  peer0.org2.example.com:
+    url: localhost:9051
+
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.example.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+
+    tlsCACerts:
+      # Certificate location absolute path
+      path: ${PWD}/../organizations/peerOrganizations/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem

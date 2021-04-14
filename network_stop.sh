@@ -3,7 +3,7 @@
 . env.sh
 
 echo "Stopping test network"
-docker-compose -f docker/docker-compose-test-net.yaml down --volumes --remove-orphans
+docker-compose -f docker/docker-compose-test-net.yaml -f docker/docker-compose-ca.yaml -f docker/docker-compose-couch.yaml down --volumes --remove-orphans
 
 echo "Deleting containers"
 CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer.*/) {print $1}')
