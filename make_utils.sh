@@ -1,8 +1,18 @@
 #!/bin/bash
 
+. env.sh
+
 WORKING_DIR=${PWD}
+
+if [ ! -d ${GOPATH}/src/github.com/hyperledger/fabric ]; then
+    mkdir -p ${GOPATH}/src/github.com/hyperledger
+    cd ${GOPATH}/src/github.com/hyperledger
+    git clone https://github.com/hyperledger/fabric
+fi
+
 echo "Changing to HLF source directory"
 cd ${GOPATH}/src/github.com/hyperledger/fabric || exit 1
+git checkout "${FABRIC_VERSION_TAG}"
 
 echo "Current directory is ${PWD}"
 echo "Making cryptogen utility"
@@ -29,9 +39,16 @@ mkdir -p ${WORKING_DIR}/bin
 cp build/bin/* ${WORKING_DIR}/bin
 
 
+if [ ! -d ${GOPATH}/src/github.com/hyperledger/fabric-ca ]; then
+    mkdir -p ${GOPATH}/src/github.com/hyperledger
+    cd ${GOPATH}/src/github.com/hyperledger
+    git clone https://github.com/hyperledger/fabric-ca
+fi
+
 echo "Changing to Fabric CA source directory"
 cd ${GOPATH}/src/github.com/hyperledger/fabric-ca || exit 1
-make fabric-ca-client
+git checkout "${FABRIC_CA_VERSION_TAG}"
+GO111MODULE=off make fabric-ca-client
 cp bin/fabric-ca-client ${WORKING_DIR}/bin
 
 echo "Returning to the working directory"

@@ -6,6 +6,8 @@ export COMPOSE_PROJECT_NAME=net
 # Hyperledger Fabric parameters
 export IMAGE_TAG=2.2.2
 export IMAGE_TAG_CA=1.4.9
+export FABRIC_VERSION_TAG=v"${IMAGE_TAG}"
+export FABRIC_CA_VERSION_TAG=v"${IMAGE_TAG_CA}"
 export CHANNEL_NAME=primary
 
 # Certs
