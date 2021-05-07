@@ -25,5 +25,6 @@ export ORDERER_CA=${PWD}/organizations/ordererOrganizations/example.com/orderers
 export CC_NAME=hello
 export CC_RUNTIME_LANGUAGE=golang
 export CC_SRC_PATH=chaincode/${CC_NAME}
-export INIT_REQUIRED="--init-required"
+#export INIT_REQUIRED="--init-required"
+export INIT_REQUIRED=""
 export CC_END_POLICY="--signature-policy AND('Org1MSP.peer','Org2MSP.peer')"

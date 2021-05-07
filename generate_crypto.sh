@@ -35,5 +35,3 @@ result=$?
 if [ $result -ne 0 ]; then
     echo "Failed creating crypto materials for Orderer"
 fi
-
-. organizations/ccp-generate.sh

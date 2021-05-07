@@ -1,11 +1,4 @@
-# Copyright IBM Corp. All Rights Reserved.
-#
-# SPDX-License-Identifier: Apache-2.0
-#
 
-# ---------------------------------------------------------------------------
-# "OrdererOrgs" - Definition of organizations managing orderer nodes
-# ---------------------------------------------------------------------------
 OrdererOrgs:
   # ---------------------------------------------------------------------------
   # Orderer
@@ -13,9 +6,7 @@ OrdererOrgs:
   - Name: Orderer
     Domain: example.com
     EnableNodeOUs: true
-    # ---------------------------------------------------------------------------
-    # "Specs" - See PeerOrgs for complete description
-    # ---------------------------------------------------------------------------
+
     Specs:
       - Hostname: orderer
         SANS:
