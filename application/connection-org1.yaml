@@ -1,29 +1,13 @@
+name: sample-network
 version: 1.0.0
 
-#
-# The client section used by GO SDK.
-#
 client:
-
-  # Which organization does this application instance belong to? The value must be the name of an org
-  # defined under "organizations"
   organization: Org1
-
-  logging:
-    level: info
-
-  # Root of the MSP directories with keys and certs.
-  cryptoconfig:
-    path: ${PWD}/../organizations
-
-  tlsCerts:
-    systemCertPool: false
-    client:
-      key:
-        path: ${PWD}/../organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.key
-      cert:
-        path: ${PWD}/../organizations/peerOrganizations/org1.example.com/users/User1@org1.example.com/tls/client.crt
-
+  connection:
+    timeout:
+      peer:
+        endorser: 300
+      orderer: 300
 
 channels:
   primary:
@@ -35,25 +19,20 @@ channels:
         eventSource: true
         discover: true
 
-
 organizations:
   Org1:
     mspid: Org1MSP
-    cryptoPath: peerOrganizations/org1.example.com/msp
     peers:
       - peer0.org1.example.com
 
 peers:
   peer0.org1.example.com:
-    url: localhost:7051
+    url: grpcs://localhost:7051
 
     grpcOptions:
       ssl-target-name-override: peer0.org1.example.com
-      keep-alive-time: 0s
-      keep-alive-timeout: 20s
-      keep-alive-permit: false
-      fail-fast: false
-      allow-insecure: false
+      hostnameOverride: peer0.org1.example.com
+      request-timeout: 120001
 
     tlsCACerts:
-      path: ${PWD}/../organizations/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+      path: ../organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt

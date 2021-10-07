@@ -1,0 +1,49 @@
+{
+  "name": "sample-network",
+  "version": "1.0.0",
+  "client": {
+    "organization": "Org2",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        },
+        "orderer": "300"
+      }
+    }
+  },
+  "channels": {
+    "primary": {
+      "peers": {
+        "peer0.org2.example.com": {
+          "endorsingPeer": true,
+          "chaincodeQuery": true,
+          "ledgerQuery": true,
+          "eventSource": true,
+          "discover": true
+        }
+      }
+    }
+  },
+  "organizations": {
+    "Org2": {
+      "mspid": "Org2MSP",
+      "peers": [
+        "peer0.org2.example.com"
+      ]
+    }
+  },
+  "peers": {
+    "peer0.org2.example.com": {
+      "url": "grpcs://localhost:9051",
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.org2.example.com",
+        "hostnameOverride": "peer0.org2.example.com",
+        "request-timeout": 120001
+      },
+      "tlsCACerts": {
+        "path": "../organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt"
+      }
+    }
+  }
+}
