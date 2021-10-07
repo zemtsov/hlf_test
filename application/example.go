@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
@@ -37,11 +36,6 @@ var Organizations = []Organization{
 }
 
 func main() {
-
-	err := os.Setenv("DISCOVERY_AS_LOCALHOST", "true")
-	if err != nil {
-		log.Fatalf("Error setting DISCOVERY_AS_LOCALHOST environemnt variable: %v", err)
-	}
 
 	org := Organizations[0]
 	log.Printf("Working with organization %s\n", org.MspID)

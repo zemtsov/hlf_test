@@ -28,12 +28,10 @@ channels:
     peers:
       peer0.org2.example.com:
         endorsingPeer: true
-
         chaincodeQuery: true
-
         ledgerQuery: true
-
         eventSource: true
+        discover: true
 #
 # list of participating organizations in this network
 #

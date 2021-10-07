@@ -33,6 +33,7 @@ channels:
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
+        discover: true
 
 
 organizations:
