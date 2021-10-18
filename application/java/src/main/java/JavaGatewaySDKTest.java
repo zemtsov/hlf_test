@@ -21,7 +21,7 @@ import java.util.concurrent.TimeoutException;
 public class JavaGatewaySDKTest {
     private static final Logger logger = LoggerFactory.getLogger(JavaGatewaySDKTest.class);
 
-    public static void main(String[] args) throws IOException, CertificateException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public static void main(String[] args) throws IOException {
 
         logger.info("creating the wallet on the file system");
         Path walletDirectory = Paths.get(Config.ClientWalletPath, Config.ClientMspId);
