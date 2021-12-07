@@ -1,0 +1,25 @@
+version: '3.7'
+
+networks:
+  ${COMPOSE_PROJECT_NAME}:
+    name: ${COMPOSE_PROJECT_NAME}
+    driver: bridge
+
+services:
+  ${DOCKER_FABRIC_TOOLS_CONTAINER}:
+    container_name: ${DOCKER_FABRIC_TOOLS_CONTAINER}
+    image: hyperledger/fabric-tools:${HLF_VERSION}
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=INFO
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ${CRYPTO_PATH_HOST}:${CRYPTO_PATH_TOOLS}
+        - ${SOURCE_PATH_HOST}:${SOURCE_PATH_TOOLS}
+    networks:
+      - ${COMPOSE_PROJECT_NAME}
