@@ -1,0 +1,38 @@
+name: sample-network
+version: 1.0.0
+
+client:
+  organization: ${ORG2_NAME}
+  connection:
+    timeout:
+      peer:
+        endorser: 300
+      orderer: 300
+
+channels:
+  primary:
+    peers:
+      ${ORG2_PEER0_ID}:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+        discover: true
+
+organizations:
+  ${ORG2_NAME}:
+    mspid: ${ORG2_MSP_ID}
+    peers:
+      - ${ORG2_PEER0_ID}
+
+peers:
+  ${ORG2_PEER0_ID}:
+    url: grpcs://localhost:${ORG2_PEER0_PORT_EXTERNAL}
+
+    grpcOptions:
+      ssl-target-name-override: ${ORG2_PEER0_ID}
+      hostnameOverride: ${ORG2_PEER0_ID}
+      request-timeout: 120001
+
+    tlsCACerts:
+      path: ${CRYPTO_PATH_HOST}/peerOrganizations/${ORG2_DOMAIN}/peers/${ORG2_PEER0_ID}/tls/ca.crt

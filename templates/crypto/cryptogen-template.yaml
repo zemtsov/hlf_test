@@ -1,0 +1,29 @@
+OrdererOrgs:
+  - Name: ${ORDERING_ORG_NAME}
+    Domain: ${ORDERING_ORG_DOMAIN}
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: ${ORDERING_SERVICE_NODE_NAME}
+        SANS:
+          - localhost
+
+PeerOrgs:
+  - Name: ${ORG1_NAME}
+    Domain: ${ORG1_DOMAIN}
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 1
+
+  - Name: ${ORG2_NAME}
+    Domain: ${ORG2_DOMAIN}
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+    Users:
+      Count: 1

@@ -1,0 +1,167 @@
+---
+Organizations:
+
+    - &${ORDERING_ORG_NAME}
+        Name: ${ORDERING_ORG_NAME}
+        ID: ${ORDERING_ORG_MSP_ID}
+        MSPDir: ${CRYPTO_PATH_TOOLS}/ordererOrganizations/${ORDERING_ORG_DOMAIN}/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: \"OR('${ORDERING_ORG_MSP_ID}.member')\"
+            Writers:
+                Type: Signature
+                Rule: \"OR('${ORDERING_ORG_MSP_ID}.member')\"
+            Admins:
+                Type: Signature
+                Rule: \"OR('${ORDERING_ORG_MSP_ID}.admin')\"
+
+        OrdererEndpoints:
+            - ${ORDERING_SERVICE_NODE_NAME}.${ORDERING_ORG_DOMAIN}:${ORDERING_SERVICE_GRPC_PORT_INTERNAL}
+
+    - &${ORG1_NAME}
+        Name: ${ORG1_NAME}
+        ID: ${ORG1_MSP_ID}
+        MSPDir: ${CRYPTO_PATH_TOOLS}/peerOrganizations/${ORG1_DOMAIN}/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: \"OR('${ORG1_MSP_ID}.admin', '${ORG1_MSP_ID}.peer', '${ORG1_MSP_ID}.client')\"
+            Writers:
+                Type: Signature
+                Rule: \"OR('${ORG1_MSP_ID}.admin', '${ORG1_MSP_ID}.client')\"
+            Admins:
+                Type: Signature
+                Rule: \"OR('${ORG1_MSP_ID}.admin')\"
+            Endorsement:
+                Type: Signature
+                Rule: \"OR('${ORG1_MSP_ID}.peer')\"
+
+    - &${ORG2_NAME}
+        Name: ${ORG2_NAME}
+        ID: ${ORG2_MSP_ID}
+        MSPDir: ${CRYPTO_PATH_TOOLS}/peerOrganizations/${ORG2_DOMAIN}/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: \"OR('${ORG2_MSP_ID}.admin', '${ORG2_MSP_ID}.peer', '${ORG2_MSP_ID}.client')\"
+            Writers:
+                Type: Signature
+                Rule: \"OR('${ORG2_MSP_ID}.admin', '${ORG2_MSP_ID}.client')\"
+            Admins:
+                Type: Signature
+                Rule: \"OR('${ORG2_MSP_ID}.admin')\"
+            Endorsement:
+                Type: Signature
+                Rule: \"OR('${ORG2_MSP_ID}.peer')\"
+
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+
+    Orderer: &OrdererCapabilities
+        V2_0: true
+
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+
+Application: &ApplicationDefaults
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: \"ANY Readers\"
+        Writers:
+            Type: ImplicitMeta
+            Rule: \"ANY Writers\"
+        Admins:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Admins\"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Endorsement\"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Endorsement\"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+
+Orderer: &OrdererDefaults
+
+    OrdererType: etcdraft
+    
+    Addresses:
+        - ${ORDERING_SERVICE_NODE_NAME}.${ORDERING_ORG_DOMAIN}:${ORDERING_SERVICE_GRPC_PORT_INTERNAL}
+
+    EtcdRaft:
+        Consenters:
+        - Host: ${ORDERING_SERVICE_NODE_NAME}.${ORDERING_ORG_DOMAIN}
+          Port: ${ORDERING_SERVICE_GRPC_PORT_INTERNAL}
+          ClientTLSCert: ${CRYPTO_PATH_TOOLS}/ordererOrganizations/${ORDERING_ORG_DOMAIN}/orderers/${ORDERING_SERVICE_NODE_NAME}.${ORDERING_ORG_DOMAIN}/tls/server.crt
+          ServerTLSCert: ${CRYPTO_PATH_TOOLS}/ordererOrganizations/${ORDERING_ORG_DOMAIN}/orderers/${ORDERING_SERVICE_NODE_NAME}.${ORDERING_ORG_DOMAIN}/tls/server.crt
+
+    BatchTimeout: 2s
+
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: \"ANY Readers\"
+        Writers:
+            Type: ImplicitMeta
+            Rule: \"ANY Writers\"
+        Admins:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Admins\"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: \"ANY Writers\"
+
+
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: \"ANY Readers\"
+        Writers:
+            Type: ImplicitMeta
+            Rule: \"ANY Writers\"
+        Admins:
+            Type: ImplicitMeta
+            Rule: \"MAJORITY Admins\"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+
+
+
+Profiles:
+    $GENESIS_BLOCK_PROFILE:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *${ORDERING_ORG_NAME}
+            Capabilities: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *${ORG1_NAME}
+                - *${ORG2_NAME}
+            Capabilities: *ApplicationCapabilities
