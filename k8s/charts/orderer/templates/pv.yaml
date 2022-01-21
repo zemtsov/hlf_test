@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: {{ .Values.mspPath }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: {{ .Values.tlsPath }}

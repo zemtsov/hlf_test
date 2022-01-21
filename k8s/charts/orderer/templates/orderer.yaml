@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      containers:
+        - image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: "0.1"
+          workingDir: "/opt/gopath/src"
+          env:
+            - name: CORE_VM_ENDPOINT
+              value: "unix:///host/var/run/docker.sock"
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: "0.0.0.0"
+            - name: ORDERER_GENERAL_LISTENPORT
+              value: "{{ .Values.portInternal }}"
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: "{{ .Values.org.mspId }}"
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: "/etc/hyperledger/fabric/msp"
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE
+              value: "/etc/hyperledger/fabric/tls/server.crt"
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
+              value: "/etc/hyperledger/fabric/tls/server.key"
+            - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
+              value: "[/etc/hyperledger/fabric/tls/ca.crt]"
+            - name: ORDERER_GENERAL_BOOTSTRAPMETHOD
+              value: "none"
+            - name: ORDERER_CHANNELPARTICIPATION_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_PRIVATEKEY
+              value: "/etc/hyperledger/fabric/tls/server.key"
+            - name: ORDERER_GENERAL_TLS_CERTIFICATE
+              value: "/etc/hyperledger/fabric/tls/server.crt"
+            - name: ORDERER_GENERAL_TLS_ROOTCAS
+              value: "[/etc/hyperledger/fabric/tls/ca.crt]"
+            - name: ORDERER_ADMIN_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_ADMIN_TLS_CERTIFICATE
+              value: "/etc/hyperledger/fabric/tls/server.crt"
+            - name: ORDERER_ADMIN_TLS_PRIVATEKEY
+              value: "/etc/hyperledger/fabric/tls/server.key"
+            - name: ORDERER_ADMIN_TLS_ROOTCAS
+              value: "[/etc/hyperledger/fabric/tls/ca.crt]"
+            - name: ORDERER_ADMIN_TLS_CLIENTROOTCAS
+              value: "[/etc/hyperledger/fabric/tls/ca.crt]"
+            - name: ORDERER_ADMIN_LISTENADDRESS
+              value: "0.0.0.0:{{ .Values.portAdminInternal }}"
+
+          volumeMounts:
+            - name: msp
+              mountPath: "/etc/hyperledger/fabric/msp"
+            - name: tls
+              mountPath: "/etc/hyperledger/fabric/tls"
+
+      imagePullSecrets:
+        - name: my-secret
+
+      volumes:
+        - name: msp
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pvc
+        - name: tls
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pvc
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}

@@ -1,0 +1,8 @@
+chaincode:
+  name: hello
+  port: 7070
+  id: hello_1:58578eb1be0fa439306cf3fcc9d1991afdd75e70442828cc53762deb9c29fa05
+
+image:
+  name: hyperledger/hello
+  tag: latest

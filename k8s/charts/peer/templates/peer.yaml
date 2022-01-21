@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+    spec:
+      containers:
+        - image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: "0.1"
+          workingDir: "/opt/gopath/src"
+          env:
+            - name: CORE_VM_ENDPOINT
+              value: "unix:///host/var/run/docker.sock"
+            - name: CORE_PEER_ID
+              value: "{{ .Chart.Name }}.{{ .Values.org.domain }}"
+            - name: CORE_PEER_LOCALMSPID
+              value: "{{ .Values.org.mspId }}"
+            - name: CORE_PEER_ADDRESS
+              value: "{{ .Release.Name }}-{{ .Chart.Name }}-svc:{{ .Values.portGrpcInternal }}"
+            - name: CORE_PEER_LISTENADDRESS
+              value: "0.0.0.0:{{ .Values.portGrpcInternal }}"
+            - name: CORE_PEER_TLS_ENABLED
+              value: "true"
+            - name: CORE_PEER_TLS_CERT_FILE
+              value: "/etc/hyperledger/fabric/tls/server.crt"
+            - name: CORE_PEER_TLS_KEY_FILE
+              value: "/etc/hyperledger/fabric/tls/server.key"
+            - name: CORE_PEER_TLS_ROOTCERT_FILE
+              value: "/etc/hyperledger/fabric/tls/ca.crt"
+            - name: CORE_PEER_GOSSIP_BOOTSTRAP
+              value: "{{ .Release.Name }}-{{ .Chart.Name }}-svc:{{ .Values.portGrpcInternal }}"
+            - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+              value: "{{ .Release.Name }}-{{ .Chart.Name }}-svc:{{ .Values.portGrpcInternal }}"
+            - name: CORE_PEER_CHAINCODEADDRESS
+              value: "{{ .Release.Name }}-{{ .Chart.Name }}-svc:{{ .Values.portChaincode }}"
+            - name: CORE_PEER_CHAINCODELISTENADDRESS
+              value: "0.0.0.0:{{ .Values.portChaincode }}"
+            {{ if eq .Values.state.couchDB true }}
+            - name: CORE_LEDGER_STATE_STATEDATABASE
+              value: CouchDB
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+              value: "{{ .Release.Name }}-{{ .Chart.Name }}-ws-svc:{{ .Values.state.couchDBInternalPort }}"
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+              value: "{{ .Values.state.couchDBUserName }}"
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+              value: "{{ .Values.state.couchDBPassword }}"
+            {{ end }}
+
+          volumeMounts:
+            - name: host-var-run
+              mountPath: /host/var/run
+            - name: msp
+              mountPath: "/etc/hyperledger/fabric/msp"
+            - name: tls
+              mountPath: "/etc/hyperledger/fabric/tls"
+            - name: src
+              mountPath: "/opt/gopath/src"
+            - name: config
+              mountPath: "/etc/hyperledger/fabric/core.yaml"
+              subPath: "core.yaml"
+
+      imagePullSecrets:
+        - name: my-secret
+
+      volumes:
+        - name: host-var-run
+          hostPath:
+            path: /var/run
+            type: Directory
+        - name: msp
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pvc
+        - name: tls
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pvc
+        - name: src
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-config-pvc
+  selector:
+    matchLabels:
+      name: "{{ .Release.Name }}-{{ .Chart.Name }}"
+
+{{ if eq .Values.state.couchDB true }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws"
+    spec:
+      containers:
+        - image: "{{ .Values.state.couchDBImage }}:{{ .Values.state.couchDBVersion }}"
+          name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws"
+          env:
+            - name: COUCHDB_USER
+              value: "{{ .Values.state.couchDBUserName }}"
+            - name: COUCHDB_PASSWORD
+              value: "{{ .Values.state.couchDBPassword }}"
+          ports:
+            - containerPort: {{ .Values.state.couchDBInternalPort }}
+              name: "port-{{ .Values.state.couchDBInternalPort }}"
+      imagePullSecrets:
+        - name: my-secret
+  selector:
+    matchLabels:
+      name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws"
+{{ end }}

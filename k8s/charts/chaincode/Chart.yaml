@@ -1,0 +1,7 @@
+apiVersion: v2
+
+name: Hello Chaincode
+
+version: 1.0.0
+
+type: application

@@ -1,0 +1,19 @@
+ordering: false
+
+peer0:
+  org:
+    mspId: Org1
+    domain: org1.example.com
+  mspPath: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp"
+  tlsPath: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls"
+  configPath: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/config"
+  portGrpcInternal: 7051
+  portGrpcExternal: 30051
+  state:
+    couchDB: false
+    couchDBImage: couchdb
+    couchDBVersion: 3.1.1
+    couchDBInternalPort: 5984
+    couchDBExternalPort: 30084
+    couchDBUserName: admin
+    couchDBPassword: adminpw

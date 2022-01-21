@@ -1,0 +1,4 @@
+global:
+  hlfVersion: 2.3
+
+  volumeSize: 100Mi

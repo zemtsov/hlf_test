@@ -1,0 +1,29 @@
+image:
+  name: hyperledger/fabric-peer
+  tag: 2.3
+
+volume:
+  size: 100Mi
+
+mspPath: "msp"
+tlsPath: "tls"
+configPath: "config"
+srcPath: "chaincode"
+
+org:
+  mspId: org1
+  domain: org1.example.com
+
+portGrpcInternal: 7051
+portGrpcExternal: 37051
+
+portChaincode: 7052
+
+state:
+  couchDB: false
+  couchDBImage: couchdb
+  couchDBVersion: 3.1.1
+  couchDBInternalPort: 5984
+  couchDBExternalPort: 30084
+  couchDBUserName: admin
+  couchDBPassword: adminpw

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: {{ .Release.Name }}-{{ .Chart.Name }}
+    spec:
+      containers:
+        - image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          name: {{ .Release.Name }}-{{ .Chart.Name }}
+          resources:
+            limits:
+              cpu: "1"
+            requests:
+              cpu: "0.1"
+          command: ['bash', '-c', 'echo The app is running! && sleep 3600']
+          workingDir: /opt/gopath/
+          env:
+            - name: CORE_VM_ENDPOINT
+              value: unix:///host/var/run/docker.sock
+          volumeMounts:
+            - name: crypto
+              mountPath: /opt/gopath/crypto
+            - name: artifacts
+              mountPath: /opt/gopath/artifacts
+            - name: chaincode
+              mountPath: /opt/gopath/src
+            - name: scripts
+              mountPath: /opt/gopath/scripts
+      imagePullSecrets:
+        - name: my-secret
+      volumes:
+        - name: crypto
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pvc
+        - name: artifacts
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pvc
+        - name: chaincode
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pvc
+        - name: scripts
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pvc
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}

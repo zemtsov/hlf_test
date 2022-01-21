@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-config-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-config-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-config-pv

@@ -1,0 +1,13 @@
+image:
+  name: hyperledger/fabric-tools
+  tag: 2.3
+
+volume:
+  size: 100Mi
+
+volumes:
+  artifacts: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/artifacts"
+  chaincode: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/chaincode"
+  config: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/config"
+  crypto: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/crypto"
+  scripts: "/Users/zemtsov/go/src/github.com/zemtsov/hlf_test/k8s/scripts"

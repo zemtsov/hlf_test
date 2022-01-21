@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-msp-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-tls-pv

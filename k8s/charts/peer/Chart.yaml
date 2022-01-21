@@ -1,0 +1,8 @@
+apiVersion: v2
+
+name: fabric-peer
+version: 0.1.0
+
+description: Hyperledger Fabric Peer
+
+type: application

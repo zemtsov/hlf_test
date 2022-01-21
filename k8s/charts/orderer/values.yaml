@@ -1,0 +1,19 @@
+image:
+  name: hyperledger/fabric-orderer
+  tag: 2.3
+
+volume:
+  size: 100Mi
+
+org:
+  mspId: OrdererOrg
+  domain: example.com
+
+mspPath: "msp"
+tlsPath: "tls"
+
+portInternal: 7050
+portExternal: 30050
+
+portAdminInternal: 7053
+portAdminExternal: 30053

@@ -1,0 +1,8 @@
+apiVersion: v2
+
+name: fabric-tools
+version: 0.1.0
+
+description: Hyperledger Fabric Tools
+
+type: application

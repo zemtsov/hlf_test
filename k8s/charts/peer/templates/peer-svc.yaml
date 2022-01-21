@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-svc
+  labels:
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-svc
+spec:
+  type: NodePort
+  ports:
+    - name: "port-{{ .Values.portGrpcInternal }}"
+      port: {{ .Values.portGrpcInternal }}
+      nodePort: {{ .Values.portGrpcExternal }}
+  selector:
+    name: {{ .Release.Name }}-{{ .Chart.Name }}
+
+{{ if eq .Values.state.couchDB true }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws-svc"
+  labels:
+    name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws-svc"
+spec:
+  type: NodePort
+  ports:
+    - name: "{{ .Values.state.couchDBInternalPort }}"
+      port: {{ .Values.state.couchDBInternalPort }}
+      nodePort: {{ .Values.state.couchDBExternalPort }}
+  selector:
+    name: "{{ .Release.Name }}-{{ .Chart.Name }}-ws"
+{{ end }}

@@ -1,0 +1,22 @@
+apiVersion: v2
+name: fabric-org
+description: Hyperledger Fabric Org
+
+type: application
+
+version: 0.1.0
+
+dependencies:
+  - name: fabric-peer
+    version: 0.1.0
+    repository: file://../peer
+    alias: peer0
+    tags:
+      - peer
+
+  - name: fabric-orderer
+    version: 0.1.0
+    repository: file://../orderer
+    alias: orderer
+    tags:
+      - ordering

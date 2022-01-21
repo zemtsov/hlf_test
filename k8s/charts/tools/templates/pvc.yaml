@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pv
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pv
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.volume.size }}
+  volumeName: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pv
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pv

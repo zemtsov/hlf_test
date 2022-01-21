@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-svc
+  labels:
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-svc
+spec:
+  type: NodePort
+  ports:
+    - name: port-{{ .Values.portInternal }}
+      port: {{ .Values.portInternal }}
+      nodePort: {{ .Values.portExternal }}
+    - name: port-{{ .Values.portAdminInternal }}
+      port: {{ .Values.portAdminInternal }}
+      nodePort: {{ .Values.portAdminExternal }}
+  selector:
+    name: {{ .Release.Name }}-{{ .Chart.Name }}

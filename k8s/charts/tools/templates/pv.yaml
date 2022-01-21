@@ -1,0 +1,77 @@
+{{/*  Volume with artifacts required for working with the channel */}}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-artifacts-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumes.artifacts }}
+
+---
+
+{{/*  Volume with crypto materials of the organization */}}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-crypto-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumes.crypto }}
+
+---
+
+{{/* Volume with the chaincode source code */}}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-chaincode-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumes.chaincode }}
+
+---
+
+{{/* Volume with scripts */}}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pv
+  labels:
+    type: local
+    name: {{ .Release.Name }}-{{ .Chart.Name }}-scripts-pv
+spec:
+  storageClassName: hostpath
+  capacity:
+    storage: {{ .Values.volume.size }}
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.volumes.scripts }}

@@ -1,0 +1,167 @@
+---
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererOrg
+        MSPDir: /opt/gopath/crypto/ordererOrganizations/example.com/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererOrg.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererOrg.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererOrg.admin')"
+
+        OrdererEndpoints:
+            - ordering-orderer-svc:7050
+
+    - &Org1
+        Name: Org1
+        ID: Org1
+        MSPDir: /opt/gopath/crypto/peerOrganizations/org1.example.com/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org1.admin', 'Org1.peer', 'Org1.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org1.admin', 'Org1.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org1.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('Org1.peer')"
+
+    - &Org2
+        Name: Org2
+        ID: Org2
+        MSPDir: /opt/gopath/crypto/peerOrganizations/org2.example.com/msp
+
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org2.admin', 'Org2.peer', 'Org2.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org2.admin', 'Org2.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org2.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('Org2.peer')"
+
+
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+
+    Orderer: &OrdererCapabilities
+        V2_0: true
+
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+
+Application: &ApplicationDefaults
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+
+Orderer: &OrdererDefaults
+
+    OrdererType: etcdraft
+    
+    Addresses:
+        - ordering-orderer-svc:7050
+
+    EtcdRaft:
+        Consenters:
+        - Host: ordering-orderer-svc
+          Port: 7050
+          ClientTLSCert: /opt/gopath/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+          ServerTLSCert: /opt/gopath/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/tls/server.crt
+
+    BatchTimeout: 2s
+
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+
+    Organizations:
+
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+
+
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+
+
+
+Profiles:
+    Genesis:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities: *OrdererCapabilities
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+            Capabilities: *ApplicationCapabilities

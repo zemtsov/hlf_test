@@ -1,0 +1,8 @@
+apiVersion: v2
+
+name: fabric-orderer
+version: 0.1.0
+
+description: Hyperledger Fabric Ordering Node
+
+type: application
