@@ -15,3 +15,12 @@
 /application/connection-org1.yaml
 /application/connection-org2.json
 /application/connection-org2.yaml
+/k8s/chaincode/hello/go.sum
+/k8s/chaincode/hello/vendor/
+/k8s/chaincode/hello/*.tar.gz
+/k8s/chaincode/hello/*.tgz
+/k8s/chaincode/hello/chaincode.env
+/k8s/chaincode/hello/connection.json
+/k8s/chaincode/hello/metadata.json
+/k8s/charts/org/Chart.lock
+/k8s/charts/org/charts/*.tgz
