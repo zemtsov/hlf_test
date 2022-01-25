@@ -10,6 +10,8 @@ if [ -f connection.json ]; then
 fi
 jq <<< "{\"address\": \"${CHAINCODE_NAME}-chaincode-svc:${CHAINCODE_PORT}\", \"dial_timeout\": \"10s\", \"tls_required\": false}" > connection.json
 
+#touch connection.json
+
 info "Writing metadata.json"
 if [ -f metadata.json ]; then
   rm metadata.json

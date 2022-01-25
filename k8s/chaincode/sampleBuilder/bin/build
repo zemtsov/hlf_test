@@ -3,19 +3,32 @@
 set -euo pipefail
 
 SOURCE=$1
+METADATA_DIR=$2
 OUTPUT=$3
 
-#external chaincodes expect connection.json file in the chaincode package
-if [ ! -f "$SOURCE/connection.json" ]; then
-    >&2 echo "$SOURCE/connection.json not found"
+# external chaincodes expect connection.json file in the chaincode package
+if [ ! -f "${SOURCE}/connection.json" ]; then
+    >&2 echo "${SOURCE}/connection.json not found"
     exit 1
 fi
 
-#simply copy the endpoint information to specified output location
-cp $SOURCE/connection.json $OUTPUT/connection.json
+# simply copy the endpoint information to specified output location
+>&2 echo "copy ${SOURCE}/connection.json to ${OUTPUT}/connection.json"
+cp "${SOURCE}"/connection.json "${OUTPUT}"/connection.json
 
-if [ -d "$SOURCE/metadata" ]; then
-    cp -a $SOURCE/metadata $OUTPUT/metadata
+#echo '{
+#  "address": "org2-hello-chaincode-svc:8070",
+#  "dial_timeout": "10s",
+#  "tls_required": false
+#}' > "${OUTPUT}"/connection.json
+
+if [ ! -f "${METADATA_DIR}/metadata.json" ]; then
+    >&2 echo "${METADATA_DIR}/metadata.json not found"
+    exit 1
 fi
+
+# simply copy the metadata.json to specified output location
+>&2 echo "copy ${METADATA_DIR}/metadata.json to ${OUTPUT}/metadata.json"
+cp "${METADATA_DIR}"/metadata.json "${OUTPUT}"/metadata.json
 
 exit 0

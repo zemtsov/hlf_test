@@ -33,7 +33,7 @@ func (cc *HelloChaincode) Invoke(stub shim.ChaincodeStubInterface) peer.Response
 
 	function, args := stub.GetFunctionAndParameters()
 
-	fmt.Println("Invoked successfully modified")
+	fmt.Println("Invoked successfully")
 
 	if function == "store" {
 		if len(args) < 2 {
@@ -95,6 +95,7 @@ func main() {
 	if err := server.Start(); err != nil {
 		log.Panicf("failed starting the chaincode server: %v", err)
 	}
+
 	//if err := shim.Start(&HelloChaincode{}); err != nil {
 	//	fmt.Printf("Failed to start chaincode. Error: %s", err.Error())
 	//}

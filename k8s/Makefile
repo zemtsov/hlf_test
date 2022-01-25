@@ -42,7 +42,7 @@ channel: ## Creating the channel
 build: ## Installing the chaincode and building it
 	$(eval CLI_POD:=$(shell kubectl get pod -l name=cli-fabric-tools -o jsonpath="{.items[0].metadata.name}"))
 	kubectl exec $(CLI_POD) -- /opt/gopath/scripts/build.sh
-	docker build -t hyperledger/hello chaincode/hello
+	docker build -t hyperledger/hello:latest chaincode/hello
 
 .PHONY: run
 run: ## Running the chaincode

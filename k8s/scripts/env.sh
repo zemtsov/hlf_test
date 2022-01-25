@@ -63,6 +63,7 @@ useOrganization() {
   local ORG=${1}
 
   if [ "${ORG}" -eq 1 ]; then
+    export ORG_NAME=${ORG1_NAME}
     export CORE_PEER_LOCALMSPID="${ORG1_MSP_ID}"
     export CORE_PEER_ID="${ORG1_PEER0_ID}"
     export CORE_PEER_ADDRESS="${ORG1_PEER0_ADDRESS}"
@@ -72,6 +73,7 @@ useOrganization() {
     export ANCHOR_PEER_PORT=${ORG1_PEER0_PORT}
 
   elif [ "${ORG}" -eq 2 ]; then
+    export ORG_NAME=${ORG2_NAME}
     export CORE_PEER_LOCALMSPID="${ORG2_MSP_ID}"
     export CORE_PEER_ID="${ORG2_PEER0_ID}"
     export CORE_PEER_ADDRESS="${ORG2_PEER0_ADDRESS}"
@@ -91,9 +93,9 @@ useOrganization() {
 ######################################################################
 
 export CHAINCODE_NAME=hello
-export CHAINCODE_VERSION=1
+export CHAINCODE_VERSION=3
 export CHAINCODE_LABEL=${CHAINCODE_NAME}_${CHAINCODE_VERSION}
-export CHAINCODE_SEQUENCE=1
+export CHAINCODE_SEQUENCE=3
 export CHAINCODE_PORT=7070
 export CHAINCODE_INIT=""
 export CHAINCODE_POLICY="AND('${ORG1_MSP_ID}.peer','${ORG2_MSP_ID}.peer')"

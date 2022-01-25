@@ -571,8 +571,13 @@ chaincode:
     # builders in the order specified below.
     # To override this property via env variable use CORE_CHAINCODE_EXTERNALBUILDERS: [{name: x, path: dir1}, {name: y, path: dir2}]
     externalBuilders:
-        - path: /opt/gopath/src/sampleBuilder
-          name: sample-builder
+        - name: sample-builder
+          path: /opt/gopath/src/sampleBuilder
+          propagateEnvironment:
+            - CORE_PEER_CC_BUILDER_LOG_LEVEL=debug
+            - CORE_CHAINCODE_CLIENT_AUTH_REQUIRED=false
+            - CORE_CHAINCODE_TLS_REQUIRED=false
+
         # - path: /path/to/directory
         #   name: descriptive-builder-name
         #   propagateEnvironment:
