@@ -6,6 +6,7 @@ export $(shell sed 's/=.*//' .env)
 clean:
 	./scripts/clean.sh
 
+.PHONY: config
 config:
 	make clean
 	./scripts/config.sh
